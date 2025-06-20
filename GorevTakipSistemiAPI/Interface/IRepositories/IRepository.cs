@@ -2,7 +2,7 @@
 using GorevTakipSistemiAPI.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace GorevTakipSistemiAPI.IRepository
+namespace GorevTakipSistemiAPI.Interface.IRepositories
 {
     public interface IRepository<T> where T :BaseEntity
     {

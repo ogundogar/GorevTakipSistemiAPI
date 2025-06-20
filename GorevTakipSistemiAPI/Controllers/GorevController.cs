@@ -1,6 +1,6 @@
 ﻿using GorevTakipSistemiAPI.Entities;
 using GorevTakipSistemiAPI.Enums;
-using GorevTakipSistemiAPI.IRepositories.IGorev;
+using GorevTakipSistemiAPI.Interface.IRepositories.IGorev;
 using GorevTakipSistemiAPI.Repositories.Gorev;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

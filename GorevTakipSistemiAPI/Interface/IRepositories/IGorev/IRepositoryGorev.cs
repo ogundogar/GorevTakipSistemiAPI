@@ -1,7 +1,7 @@
 ﻿using GorevTakipSistemiAPI.Entities;
-using GorevTakipSistemiAPI.IRepository;
+using GorevTakipSistemiAPI.Interface.IRepositories;
 
-namespace GorevTakipSistemiAPI.IRepositories.IGorev
+namespace GorevTakipSistemiAPI.Interface.IRepositories.IGorev
 {
     public interface IRepositoryGorev:IRepository<Gorev>
     {

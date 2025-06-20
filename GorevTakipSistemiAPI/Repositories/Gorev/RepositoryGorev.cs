@@ -1,6 +1,6 @@
 ﻿using GorevTakipSistemiAPI.Contexts;
+using GorevTakipSistemiAPI.Interface.IRepositories.IGorev;
 using GorevTakipSistemiAPI.IRepositories;
-using GorevTakipSistemiAPI.IRepositories.IGorev;
 
 namespace GorevTakipSistemiAPI.Repositories.Gorev
 {

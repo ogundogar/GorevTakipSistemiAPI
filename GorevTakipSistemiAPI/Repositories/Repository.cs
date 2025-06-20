@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using GorevTakipSistemiAPI.Contexts;
 using GorevTakipSistemiAPI.Entities.Common;
-using GorevTakipSistemiAPI.IRepository;
+using GorevTakipSistemiAPI.Interface.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

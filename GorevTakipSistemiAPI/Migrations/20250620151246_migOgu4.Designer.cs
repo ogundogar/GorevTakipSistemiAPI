@@ -4,6 +4,7 @@ using GorevTakipSistemiAPI.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GorevTakipSistemiAPI.Migrations
 {
     [DbContext(typeof(GorevTakipDbContext))]
-    partial class GorevTakipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250620151246_migOgu4")]
+    partial class migOgu4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

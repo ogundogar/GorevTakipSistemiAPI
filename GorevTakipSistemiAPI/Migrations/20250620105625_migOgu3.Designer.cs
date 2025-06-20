@@ -4,6 +4,7 @@ using GorevTakipSistemiAPI.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GorevTakipSistemiAPI.Migrations
 {
     [DbContext(typeof(GorevTakipDbContext))]
-    partial class GorevTakipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250620105625_migOgu3")]
+    partial class migOgu3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,12 +53,7 @@ namespace GorevTakipSistemiAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("kullaniciId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("kullaniciId");
 
                     b.ToTable("Gorevler");
                 });
@@ -267,17 +265,6 @@ namespace GorevTakipSistemiAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GorevTakipSistemiAPI.Entities.Gorev", b =>
-                {
-                    b.HasOne("GorevTakipSistemiAPI.Entities.Kullanici", "kullanici")
-                        .WithMany("Gorevler")
-                        .HasForeignKey("kullaniciId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("kullanici");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("GorevTakipSistemiAPI.Entities.Role", null)
@@ -327,11 +314,6 @@ namespace GorevTakipSistemiAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GorevTakipSistemiAPI.Entities.Kullanici", b =>
-                {
-                    b.Navigation("Gorevler");
                 });
 #pragma warning restore 612, 618
         }

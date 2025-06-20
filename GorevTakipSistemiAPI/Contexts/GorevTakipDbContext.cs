@@ -1,10 +1,11 @@
 ﻿using GorevTakipSistemiAPI.Entities;
 using GorevTakipSistemiAPI.Entities.Common;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GorevTakipSistemiAPI.Contexts
 {
-    public class GorevTakipDbContext:DbContext
+    public class GorevTakipDbContext:IdentityDbContext<Kullanici,Role,int>
     {
         public GorevTakipDbContext(DbContextOptions options) : base(options)
         { }
