@@ -1,10 +1,14 @@
 using GorevTakipSistemiAPI.Contexts;
 using GorevTakipSistemiAPI.Entities;
 using GorevTakipSistemiAPI.Interface.IRepositories.IGorev;
+using GorevTakipSistemiAPI.Interface.IService;
 using GorevTakipSistemiAPI.Repositories.Gorev;
+using GorevTakipSistemiAPI.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,14 +29,16 @@ builder.Services.AddIdentity<Kullanici,Role>(options =>
 }).AddEntityFrameworkStores<GorevTakipDbContext>();
 
 builder.Services.AddScoped<IRepositoryGorev, RepositoryGorev>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddAuthentication("Admin")
-    .AddJwtBearer(options => { options.TokenValidationParameters = new() 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer("Admin", options => { options.TokenValidationParameters = new() 
         {
-            //ValidateAudience = true,
-            //ValidateIssuer = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+                //ValidateAudience = true,
+                //ValidateIssuer = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Token:TokenKey"])),
         }; 
     });
 
@@ -48,6 +54,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
