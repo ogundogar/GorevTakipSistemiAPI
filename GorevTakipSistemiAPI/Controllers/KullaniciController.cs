@@ -58,10 +58,10 @@ namespace GorevTakipSistemiAPI.Controllers
 
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes ="Admin")]
+        
         public object Kullanicilar()
         {
-            var girisKullanici = _kullaniciManager.Users.Select(x=>new { x.UserName,x.Email}). ToList();
+            var girisKullanici = _kullaniciManager.Users.Select(x=>new { x.Id,x.UserName,x.Email}). ToList();
             return girisKullanici;
         }
     }

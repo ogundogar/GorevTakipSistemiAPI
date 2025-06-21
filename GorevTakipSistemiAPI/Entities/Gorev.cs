@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using GorevTakipSistemiAPI.Entities.Common;
 using GorevTakipSistemiAPI.Enums;
 
@@ -11,6 +12,7 @@ namespace GorevTakipSistemiAPI.Entities
         public DateTime bitTarih { get; set; }
         public string konu { get; set; }
         public enumDurum durum{ get; set; }
+        public int kullaniciId { get; set; }
         public Kullanici kullanici { get; set; }
 
     }

@@ -1,4 +1,5 @@
-﻿using GorevTakipSistemiAPI.Entities;
+﻿using GorevTakipSistemiAPI.DTOs;
+using GorevTakipSistemiAPI.Entities;
 using GorevTakipSistemiAPI.Enums;
 using GorevTakipSistemiAPI.Interface.IRepositories.IGorev;
 using GorevTakipSistemiAPI.Repositories.Gorev;
@@ -20,7 +21,16 @@ namespace GorevTakipSistemiAPI.Controllers
         [HttpGet]
         public  object GorevGetAll()
         {
-            return _repository.GetAll();
+            return _repository.GetAll().Select(x => new
+            {
+                x.Id,
+                x.baslik,
+                x.basTarih,
+                x.bitTarih,
+                x.kullanici.UserName,
+                x.konu,
+                x.durum
+            });
         }
 
         [HttpGet("GetWhere")]
@@ -30,8 +40,18 @@ namespace GorevTakipSistemiAPI.Controllers
         }
 
         [HttpPost]
-        public async Task GorevAdd(Gorev gorev)
+        public async Task GorevAdd(DTOGorev grv)
         {
+            Gorev gorev = new()
+            {
+                baslik=grv.baslik,
+                basTarih=grv.basTarih,
+                bitTarih=grv.bitTarih,
+                konu=grv.konu,
+                durum=grv.durum,
+                kullaniciId=grv.kullaniciId
+            };
+
             await _repository.Add(gorev);
             await _repository.SaveAsync();
         }
@@ -58,4 +78,5 @@ namespace GorevTakipSistemiAPI.Controllers
         }
 
     }
+
 }

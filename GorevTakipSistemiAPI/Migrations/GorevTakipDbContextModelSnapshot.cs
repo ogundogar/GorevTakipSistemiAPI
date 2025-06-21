@@ -57,7 +57,7 @@ namespace GorevTakipSistemiAPI.Migrations
 
                     b.HasIndex("kullaniciId");
 
-                    b.ToTable("Gorevler");
+                    b.ToTable("Gorevler", (string)null);
                 });
 
             modelBuilder.Entity("GorevTakipSistemiAPI.Entities.Kullanici", b =>
