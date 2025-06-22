@@ -50,7 +50,7 @@ namespace GorevTakipSistemiAPI.Controllers
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.CheckPasswordSignInAsync(girisKullanici, kullanici.sifre, false);
             if (result.Succeeded)
             {
-               DTOToken token= _tokenService.createAccessToken(20,girisKullanici);
+               DTOToken token= _tokenService.createAccessToken(60,girisKullanici);
                 return token;
             }
             throw new Exception("Şifrenizi kontrol ediniz!");
@@ -58,7 +58,6 @@ namespace GorevTakipSistemiAPI.Controllers
 
 
         [HttpGet]
-        
         public object Kullanicilar()
         {
             var girisKullanici = _kullaniciManager.Users.Select(x=>new { x.Id,x.UserName,x.Email}). ToList();

@@ -4,6 +4,7 @@ namespace GorevTakipSistemiAPI.DTOs
 {
     public class DTOGorev
     {
+        public int Id { get; set; }
         public string baslik { get; set; }
         public DateTime basTarih { get; set; }
         public DateTime bitTarih { get; set; }
