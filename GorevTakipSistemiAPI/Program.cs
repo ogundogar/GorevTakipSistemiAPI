@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("https://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -41,6 +41,7 @@ builder.Services.AddIdentity<Kullanici,Role>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
 }).AddEntityFrameworkStores<GorevTakipDbContext>();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -80,12 +81,13 @@ if (app.Environment.IsDevelopment())
 }
 //app.UseCors();
 app.UseCors("AllowAngularApp");
+app.UseSession();
 app.UseHttpsRedirection();
 
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSession();
+
 app.MapControllers();
 
 app.Run();

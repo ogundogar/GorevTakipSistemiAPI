@@ -43,7 +43,6 @@ namespace GorevTakipSistemiAPI.Controllers
             }
 
             return Ok();
-
         }
 
         public class gorevFiltrele
