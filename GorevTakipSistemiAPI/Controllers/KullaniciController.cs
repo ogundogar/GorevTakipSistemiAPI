@@ -1,10 +1,12 @@
 ﻿using GorevTakipSistemiAPI.DTOs;
 using GorevTakipSistemiAPI.Entities;
 using GorevTakipSistemiAPI.Interface.IService;
+using GorevTakipSistemiAPI.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace GorevTakipSistemiAPI.Controllers
 {
@@ -28,7 +30,18 @@ namespace GorevTakipSistemiAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> KullaniciOlustur(DTOKullanici kullanici)
         {
-           IdentityResult result= await _kullaniciManager.CreateAsync(new()
+            var validator = new KullaniciValidation();
+
+            var validationResult = validator.Validate(kullanici);
+
+            if (!validationResult.IsValid)
+            {
+                var hatalar = string.Join("\n", validationResult.Errors.Select(e => $"- {e.ErrorMessage}"));
+                return Ok("Hata oluştu!\n" + hatalar);
+            }
+
+
+            IdentityResult result= await _kullaniciManager.CreateAsync(new()
             {
                 UserName=kullanici.adi,
                 Email = kullanici.email,
@@ -51,6 +64,7 @@ namespace GorevTakipSistemiAPI.Controllers
             if (result.Succeeded)
             {
                DTOToken token= _tokenService.createAccessToken(60,girisKullanici);
+                HttpContext.Session.SetString("kullanici", JsonConvert.SerializeObject(girisKullanici));
                 return token;
             }
             throw new Exception("Şifrenizi kontrol ediniz!");

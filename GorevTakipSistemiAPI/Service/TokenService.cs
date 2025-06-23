@@ -37,7 +37,7 @@ namespace GorevTakipSistemiAPI.Service
                 expires: token.expiration,
                 notBefore: DateTime.UtcNow,
                 signingCredentials: signingCredentials,
-                claims: new List<Claim> { new(ClaimTypes.Name, kullanici.UserName) }
+                claims: new List<Claim> { new(ClaimTypes.Email, kullanici.Email) }
                 );
 
 

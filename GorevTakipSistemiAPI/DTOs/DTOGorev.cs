@@ -10,6 +10,5 @@ namespace GorevTakipSistemiAPI.DTOs
         public DateTime bitTarih { get; set; }
         public string konu { get; set; }
         public enumDurum durum { get; set; }
-        public int kullaniciId { get; set; }
     }
 }

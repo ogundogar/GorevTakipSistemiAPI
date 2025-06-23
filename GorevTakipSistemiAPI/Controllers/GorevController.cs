@@ -3,8 +3,11 @@ using GorevTakipSistemiAPI.Entities;
 using GorevTakipSistemiAPI.Enums;
 using GorevTakipSistemiAPI.Interface.IRepositories.IGorev;
 using GorevTakipSistemiAPI.Repositories.Gorev;
+using GorevTakipSistemiAPI.Validation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace GorevTakipSistemiAPI.Controllers
 {
@@ -21,18 +24,26 @@ namespace GorevTakipSistemiAPI.Controllers
         [HttpGet]
         public object GorevGetAll()
         {
-            var gorevler=_repository.GetAll().Select(x => new
+            Kullanici? sessionKullanici;
+            var session = HttpContext.Session.GetString("kullanici");
+            if (!string.IsNullOrEmpty(session))
             {
-                x.Id,
-                x.baslik,
-                baslangicTarihi= x.basTarih,
-                bitisTarihi=x.bitTarih,
-                x.kullanici.UserName,
-                x.konu,
-                x.durum
-            }).ToList();
+                sessionKullanici = JsonConvert.DeserializeObject<Kullanici>(session);
+                var gorevler = _repository.GetAll().Where(x => x.kullaniciId == sessionKullanici.Id).Select(x => new
+                {
+                    x.Id,
+                    x.baslik,
+                    baslangicTarihi = x.basTarih,
+                    bitisTarihi = x.bitTarih,
+                    x.kullanici.UserName,
+                    x.konu,
+                    x.durum
+                }).ToList();
+                return Ok(gorevler);
+            }
 
-            return Ok(gorevler);
+            return Ok();
+
         }
 
         public class gorevFiltrele
@@ -49,19 +60,45 @@ namespace GorevTakipSistemiAPI.Controllers
         [HttpGet("GetWhere")]
         public object GorevGetWhere([FromQuery] gorevFiltrele gorevFiltrele)
         {
-            var gorevler = _repository;
-            IQueryable query=null;
-            if (gorevFiltrele.Id != null)
-                query = gorevler.GetWhere(x => x.Id == gorevFiltrele.Id);
-            if (gorevFiltrele.baslik != null)
-                query = gorevler.GetWhere(x => x.baslik.Contains(gorevFiltrele.baslik));
-            if (gorevFiltrele.basTarih != null)
-                query = gorevler.GetWhere(x => x.basTarih == gorevFiltrele.basTarih);
-            if (gorevFiltrele.bitTarih != null)
-                query = gorevler.GetWhere(x => x.bitTarih == gorevFiltrele.bitTarih);
-            if (gorevFiltrele.durum != null)
-                query = gorevler.GetWhere(x => x.durum == gorevFiltrele.durum);
-            return query;
+
+            Kullanici? sessionKullanici;
+            var session = HttpContext.Session.GetString("kullanici");
+            if (!string.IsNullOrEmpty(session))
+            {
+                sessionKullanici = JsonConvert.DeserializeObject<Kullanici>(session);
+                var gorevler = _repository.GetAll().Where(x => x.kullaniciId == sessionKullanici.Id);
+
+                if (gorevFiltrele.Id != null)
+                    gorevler = gorevler.Where(x => x.Id == gorevFiltrele.Id);
+
+                if (gorevFiltrele.baslik != null)
+                    gorevler = gorevler.Where(x => x.baslik.Contains(gorevFiltrele.baslik));
+
+                if (gorevFiltrele.basTarih != null)
+                    gorevler = gorevler.Where(x => x.basTarih >= gorevFiltrele.basTarih);
+
+                if (gorevFiltrele.bitTarih != null)
+                    gorevler = gorevler.Where(x => x.bitTarih <= gorevFiltrele.bitTarih);
+
+                if (gorevFiltrele.durum != null)
+                    gorevler = gorevler.Where(x => x.durum == gorevFiltrele.durum);
+
+                gorevler.Select(x => new
+                {
+                    x.Id,
+                    x.baslik,
+                    baslangicTarihi = x.basTarih,
+                    bitisTarihi = x.bitTarih,
+                    x.kullanici.UserName,
+                    x.konu,
+                    x.durum
+                }).ToList();
+
+                return Ok(gorevler);
+            }
+
+            
+            return Ok();
         }
 
         [HttpPost]
@@ -69,6 +106,25 @@ namespace GorevTakipSistemiAPI.Controllers
         {
             try
             {
+                var validator = new GorevValidation();
+
+                var validationResult = validator.Validate(grv);
+
+                if (!validationResult.IsValid)
+                {
+                    var hatalar = string.Join("\n", validationResult.Errors.Select(e => $"- {e.ErrorMessage}"));
+                    return Ok("Hata oluştu!\n" + hatalar);
+                }
+
+
+                Kullanici? sessionKullanici;
+                var session = HttpContext.Session.GetString("kullanici");
+                if (string.IsNullOrEmpty(session))
+                {
+                    return Ok("Hata oluştu!");
+                }
+                sessionKullanici = JsonConvert.DeserializeObject<Kullanici>(session);
+
                 Gorev gorev = new()
                 {
                     baslik = grv.baslik,
@@ -76,7 +132,7 @@ namespace GorevTakipSistemiAPI.Controllers
                     bitTarih = grv.bitTarih,
                     konu = grv.konu,
                     durum = grv.durum,
-                    kullaniciId = grv.kullaniciId
+                    kullaniciId = sessionKullanici.Id
                 };
 
                 await _repository.Add(gorev);
@@ -91,10 +147,30 @@ namespace GorevTakipSistemiAPI.Controllers
         }
 
         [HttpPut]
-        public bool GorevUpdate(DTOGorev grv)
+        public IActionResult GorevUpdate(DTOGorev grv)
         {
             try
             {
+                var validator = new GorevValidation();
+
+                var validationResult = validator.Validate(grv);
+
+                if (!validationResult.IsValid)
+                {
+                    var hatalar = string.Join("\n", validationResult.Errors.Select(e => $"- {e.ErrorMessage}"));
+                    return Ok("Hata oluştu!\n" + hatalar);
+                }
+
+
+                Kullanici? sessionKullanici;
+                var session = HttpContext.Session.GetString("kullanici");
+                if (string.IsNullOrEmpty(session))
+                {
+                    return Ok("Hata oluştu!");
+                }
+                sessionKullanici = JsonConvert.DeserializeObject<Kullanici>(session);
+
+
                 Gorev gorev = new()
                 {
                     Id = (int)grv.Id,
@@ -103,24 +179,41 @@ namespace GorevTakipSistemiAPI.Controllers
                     bitTarih = grv.bitTarih,
                     konu = grv.konu,
                     durum = grv.durum,
-                    kullaniciId = grv.kullaniciId
+                    kullaniciId = sessionKullanici.Id
+                    
                 };
 
                 _repository.Update(gorev);
                 _repository.SaveAsync();
-                return true;
+                return Ok("Başarılı bir şekilde işlem gerçekleşmiştir.");
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                return Ok("Hata oluştu: " + ex.Message);
             }
         }
 
         [HttpDelete]
-        public async Task GorevRemove(int id)
+        public async Task<IActionResult> GorevRemove(int id)
         {
-            await _repository.Remove(id);
-            await _repository.SaveAsync();
+            Kullanici? sessionKullanici;
+            var session = HttpContext.Session.GetString("kullanici");
+            if (string.IsNullOrEmpty(session))
+            {
+                return Ok("Silme işlemi sırasında hata oluştu");
+            }
+            sessionKullanici = JsonConvert.DeserializeObject<Kullanici>(session);
+
+            var gorev = _repository.GetAll().Where(x=>x.Id==id).Select(x=>x.kullaniciId).FirstOrDefault();
+            if (gorev == sessionKullanici.Id)
+            {
+                if (id>0) { 
+                await _repository.Remove(id);
+                await _repository.SaveAsync();
+                return Ok("Başarılı bir şekilde işlem gerçekleşmiştir.");
+                }
+            }
+            return Ok("Silme işlemi sırasında hata oluştu");
         }
 
         [HttpDelete("RemoveRange")]
