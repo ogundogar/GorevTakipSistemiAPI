@@ -8,16 +8,10 @@ dotnet restore
 ```
 Bu komut NuGet paketlerini indirir.
 
-2. Veritabanını Oluştur ve Güncelle (Migrations)
-Code First kullanıyorsan ve migration'ların varsa, veritabanını oluşturmak için şu adımları uygula:
-
-Öncelikle veritabanı bağlantı stringinin appsettings.json dosyasında doğru olduğundan emin ol (başka bilgisayarda veritabanı ayarların farklı olabilir).
-
-Sonra terminalde proje klasöründe şunu çalıştır:
-
+2. Veritabanını Oluştur
+Code First kullanılarak geliştirilme yapılmıştır. Veri tabanını oluşturmak için aşağıdaki komutu yazınız.
 ```bash
 dotnet ef database update
 ```
-Bu komut, migration'ları veritabanına uygular ve veritabanını oluşturur/günceller.
+Bu komut, migration'ları veritabanına uygular ve veritabanını oluşturur.
 
-Projeyi artık çalıştırablirsiniz.
