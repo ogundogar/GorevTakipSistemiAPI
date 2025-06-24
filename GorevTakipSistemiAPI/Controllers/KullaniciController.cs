@@ -48,7 +48,7 @@ namespace GorevTakipSistemiAPI.Controllers
             },kullanici.sifre);
 
             return result.Succeeded
-                ? Ok("Kullanıcı Oluşturuldu")
+                ? Ok(new { success = true, message = "Başarılı bir şekilde kullanıcı oluşturuldu." })
                 : BadRequest(result.Errors.Select(x => x.Description).ToList());
         }
 

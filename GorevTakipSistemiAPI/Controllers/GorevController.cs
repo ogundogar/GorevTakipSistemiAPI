@@ -33,8 +33,8 @@ namespace GorevTakipSistemiAPI.Controllers
                 {
                     x.Id,
                     x.baslik,
-                    baslangicTarihi = x.basTarih,
-                    bitisTarihi = x.bitTarih,
+                    x.basTarih,
+                    x.bitTarih,
                     x.kullanici.UserName,
                     x.konu,
                     x.durum
@@ -136,7 +136,7 @@ namespace GorevTakipSistemiAPI.Controllers
 
                 await _repository.Add(gorev);
                 await _repository.SaveAsync();
-                return Ok("Başarılı bir şekilde işlem gerçekleşmiştir.");
+                return Ok(new { success = true, message = "Başarılı bir şekilde işlem gerçekleşmiştir." });
             }
             catch (Exception ex)
             {
@@ -184,7 +184,7 @@ namespace GorevTakipSistemiAPI.Controllers
 
                 _repository.Update(gorev);
                 _repository.SaveAsync();
-                return Ok("Başarılı bir şekilde işlem gerçekleşmiştir.");
+                return Ok(new { success = true, message = "Başarılı bir şekilde işlem gerçekleşmiştir." });
             }
             catch (Exception ex)
             {
@@ -209,7 +209,7 @@ namespace GorevTakipSistemiAPI.Controllers
                 if (id>0) { 
                 await _repository.Remove(id);
                 await _repository.SaveAsync();
-                return Ok("Başarılı bir şekilde işlem gerçekleşmiştir.");
+                return Ok(new { success = true, message = "Başarılı bir şekilde işlem gerçekleşmiştir." });
                 }
             }
             return Ok("Silme işlemi sırasında hata oluştu");
