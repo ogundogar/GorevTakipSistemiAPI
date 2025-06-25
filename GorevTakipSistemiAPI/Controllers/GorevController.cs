@@ -35,13 +35,11 @@ namespace GorevTakipSistemiAPI.Controllers
                     x.baslik,
                     x.basTarih,
                     x.bitTarih,
-                    x.kullanici.UserName,
                     x.konu,
                     x.durum
                 }).ToList();
                 return Ok(gorevler);
             }
-
             return Ok();
         }
 

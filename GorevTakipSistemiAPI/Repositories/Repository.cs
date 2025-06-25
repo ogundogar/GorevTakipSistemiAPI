@@ -16,20 +16,20 @@ namespace GorevTakipSistemiAPI.IRepositories
         }
         public DbSet<T> Table => _context.Set<T>();
 
-        public IQueryable<T> GetAll(bool tracking = true)
+        public List<T> GetAll(bool tracking = true)
         {
             var query = Table.AsQueryable();
             if (!tracking)
                 query = query.AsNoTracking();
-            return query;
+            return query.ToList();
         }
 
-        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true)
+        public List<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true)
         {
             var query = Table.Where(method);
             if (!tracking)
                 query = query.AsNoTracking();
-            return query;
+            return query.ToList();
         }
 
         public async Task<bool> Add(T model)

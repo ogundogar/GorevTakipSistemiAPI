@@ -63,7 +63,7 @@ namespace GorevTakipSistemiAPI.Controllers
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.CheckPasswordSignInAsync(girisKullanici, kullanici.sifre, false);
             if (result.Succeeded)
             {
-                DTOToken token= _tokenService.createAccessToken(60,girisKullanici);
+                DTOToken token= _tokenService.createAccessToken(300,girisKullanici);
                 HttpContext.Session.SetString("kullanici", JsonConvert.SerializeObject(girisKullanici));
                 return token;
             }

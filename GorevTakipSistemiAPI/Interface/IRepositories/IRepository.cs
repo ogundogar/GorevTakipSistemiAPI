@@ -8,8 +8,8 @@ namespace GorevTakipSistemiAPI.Interface.IRepositories
     {
         DbSet<T> Table { get; }
 
-        IQueryable<T> GetAll(bool tracking = true);
-        IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true);
+        List<T> GetAll(bool tracking = true);
+        List<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true);
 
         Task<bool> Add(T model);
 
