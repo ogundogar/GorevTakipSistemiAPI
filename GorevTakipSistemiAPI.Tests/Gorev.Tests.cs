@@ -32,8 +32,8 @@ namespace GorevTakipSistemiAPI.Tests
                 new Gorev() {
                     Id = 1,
                     baslik = "deneme1",
-                    basTarih = new DateTime(),
-                    bitTarih = new DateTime(),
+                    basTarih = new DateTime(2025, 6, 27),
+                    bitTarih = new DateTime(2023, 6, 28),
                     konu = "test konu1",
                     durum = Enums.enumDurum.devamEdiyor,
                     kullaniciId=7
@@ -41,8 +41,8 @@ namespace GorevTakipSistemiAPI.Tests
                 new Gorev() {
                     Id = 2,
                     baslik = "deneme2",
-                    basTarih = new DateTime(),
-                    bitTarih = new DateTime(),
+                    basTarih = new DateTime(2025, 6, 21),
+                    bitTarih = new DateTime(2025, 6, 30),
                     konu = "test konu2",
                     durum = Enums.enumDurum.devamEdiyor,
                     kullaniciId=7
@@ -50,8 +50,8 @@ namespace GorevTakipSistemiAPI.Tests
                 new Gorev() {
                     Id = 3,
                     baslik = "deneme3",
-                    basTarih = new DateTime(),
-                    bitTarih = new DateTime(),
+                    basTarih = new DateTime(2025, 6, 20),
+                    bitTarih = new DateTime(2025, 6, 30),
                     konu = "test konu3",
                     durum = Enums.enumDurum.devamEdiyor,
                     kullaniciId=7
